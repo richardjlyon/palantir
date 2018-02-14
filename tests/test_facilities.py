@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-from palantir.facilities import Asset, Pex, WellHeadPlatform, Well, OilWell, GasWell, DEFAULT_SLOTS, DEFAULT_CHOKE
-from anytree import findall
 import pytest
+from anytree import findall
+from palantir.facilities import Asset, DEFAULT_CHOKE, DEFAULT_SLOTS, GasWell, OilWell, Pex, Well, WellHeadPlatform
 
 asset = Asset('test_asset')
 pex = Pex(name='test_pex')
@@ -92,6 +92,18 @@ class TestWell:
     def test_name(self):
         global well
         assert well.name == 'test_well'
+
+    def test_whp(self):
+        global well
+        assert well.whp.name == 'test_whp'
+
+    def test_pex(self):
+        global well
+        assert well.pex.name == 'test_pex'
+
+    def test_asset(self):
+        global well
+        assert well.asset.name == 'test_asset'
 
     def test_choke(self):
         global well

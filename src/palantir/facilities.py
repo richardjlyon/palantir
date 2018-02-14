@@ -1,7 +1,8 @@
 """ Classes that represent physical facilities"""
 
-from anytree import NodeMixin, findall
 from datetime import datetime
+
+from anytree import NodeMixin, findall
 
 DEFAULT_SLOTS = 6  # TODO Fix
 DEFAULT_CHOKE = 1
@@ -77,7 +78,6 @@ class Well(NodeMixin):
         self._choke = DEFAULT_CHOKE
         self._start_date = None
         self.active_period = None
-        self.profile = None
 
     @property
     def choke(self):
@@ -89,6 +89,18 @@ class Well(NodeMixin):
             self._choke = value
         else:
             raise ValueError("Couldn't set choke with type {}".format(type(value)))
+
+    @property
+    def whp(self):
+        return self.parent
+
+    @property
+    def pex(self):
+        return self.whp.parent
+
+    @property
+    def asset(self):
+        return self.pex.parent
 
     @property
     def start_date(self):
@@ -110,6 +122,7 @@ class OilWell(Well):
         self.ultimate_oil_recovery = None
         self.initial_oil_rate = None
         self.gas_oil_ratio = None
+        self.b_oil = None
 
 
 class GasWell(Well):
@@ -120,3 +133,4 @@ class GasWell(Well):
         self.ultimate_gas_recovery = None
         self.initial_gas_rate = None
         self.gas_condensate_ratio = None
+        self.b_gas = None
