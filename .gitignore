@@ -11,6 +11,9 @@ __pycache__/*
 .cache/*
 .*.swp
 */.ipynb_checkpoints/*
+.DS_Store
+.pytest_cache/*
+src/Model/*
 
 # Project files
 .ropeproject
@@ -40,3 +43,6 @@ docs/api/*
 docs/_build/*
 cover/*
 MANIFEST
+
+# Virtual environment
+venv/*

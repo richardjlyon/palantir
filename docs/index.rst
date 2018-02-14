@@ -6,36 +6,25 @@ This is the documentation of **palantir**.
 
 .. note::
 
-    This is the main page of your project's `Sphinx <http://sphinx-doc.org/>`_
-    documentation. It is formatted in `reStructuredText
-    <http://sphinx-doc.org/rest.html>`__. Add additional pages by creating
-    rst-files in ``docs`` and adding them to the `toctree
-    <http://sphinx-doc.org/markup/toctree.html>`_ below. Use then
-    `references <http://sphinx-doc.org/markup/inline.html>`__ in order to link
-    them from this page, e.g. :ref:`authors <authors>` and :ref:`changes`.
+Forecaster predicts the oil and gas that will be produced by a system of wells, and the cost of producing it.
+Wells may already exist, or be created.
 
-    It is also possible to refer to the documentation of other Python packages
-    with the `Python domain syntax
-    <http://sphinx-doc.org/domains.html#the-python-domain>`__. By default you
-    can reference the documentation of `Sphinx <http://sphinx.pocoo.org>`__,
-    `Python <http://docs.python.org/>`__, `NumPy
-    <http://docs.scipy.org/doc/numpy>`__, `SciPy
-    <http://docs.scipy.org/doc/scipy/reference/>`__, `matplotlib
-    <http://matplotlib.sourceforge.net>`__, `Pandas
-    <http://pandas.pydata.org/pandas-docs/stable>`__, `Scikit-Learn
-    <http://scikit-learn.org/stable>`__. You can add more by
-    extending the ``intersphinx_mapping`` in your Sphinx's ``conf.py``.
+Wells  produce some combination of oil, gas, and condensate, which varies over time.
+There are two types of well - oil wells, and gas wells.
 
-    The pretty useful extension `autodoc
-    <http://www.sphinx-doc.org/en/stable/ext/autodoc.html>`__ is activated by
-    default and lets you include documentation from docstrings. Docstrings can
-    be written in `Google
-    <http://google.github.io/styleguide/pyguide.html#Comments>`__
-    (recommended!), `NumPy
-    <https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt>`__
-    and `classical
-    <http://www.sphinx-doc.org/en/stable/domains.html#info-field-lists>`__
-    style.
+A well becomes active after it has been drilled. At any time in its active period, it has a maximum rate, above which it can't produce. The rate starts at an initial value and declines over time. The well is assumed to be inactive after its potential falls below a defined rate. The duration of the active period, and the volume produced during the active period, are defined. It has a decline rate that causes that volume to be produced in the active period.
+During the active period, production may be reduced below the well's potential. Choking a well increases the length of its active period.
+Oil wells produce gas at  rate defined by a gas/oil ratio. Gas/oil ratio varies over time.
+
+Gas wells produce condensate at a rate defined by a gas/condensate ratio. Gas/condensate ratio varies over time.
+Wells are created by rigs, on well head platforms, in licence areas.
+
+Well head platforms have a defined number of slots, which can vary. A platform takes a defined amount of time and money to create. Money is spent at a fixed rate during the creation time.
+A rig can drill one well at a time on a well head platform. A rig requires a defined amount of time to drill a well, which can vary over time. A rig costs a defined amount of money while drilling. A rig can move between well head platforms and requires a defined amount of time and money to do so. A rig can standby for defined amounts of time and requires a defined amount of money to do so.
+The activity of the rig is defined by a program. A program is a sequence of steps executied in order. A step is an action and a set of parameters.
+
+Production is the aggregate of the oil, gas, and condensate production from the active wells. Production is availble for individual wells, and aggregated for licences and well head platforms.
+Total production may be constrained by oil, gas, or condensate limits. Limits may be imposed at well, well head platform, or system level, and vary over time.
 
 
 Contents
