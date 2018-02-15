@@ -1,4 +1,5 @@
 """Classes that represent production profiles"""
+
 import numpy as np
 import pandas as pd
 from palantir.facilities import OilWell
