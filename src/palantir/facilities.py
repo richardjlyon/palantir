@@ -26,6 +26,23 @@ class Asset(NodeMixin):
     def pexes(self):
         return findall(self, filter_=lambda node: type(node).__name__ == "Pex")
 
+    @property
+    def wellhead_platforms(self):
+        return findall(self, filter_=lambda node: type(node).__name__ == "WellHeadPlatform")
+
+    @property
+    def wells(self):
+        oil_wells = findall(self, filter_=lambda node: type(node).__name__ == "OilWell")
+        gas_wells = findall(self, filter_=lambda node: type(node).__name__ == "GasWell")
+        return oil_wells + gas_wells
+
+    def get_wellhead_platform_by_name(self, wellhead_platform_name):
+        return next((wellhead_platform for wellhead_platform in self.wellhead_platforms if
+                     wellhead_platform.name == wellhead_platform_name), None)
+
+    def get_well_by_name(self, well_name):
+        return next((well for well in self.wells if well.name == well_name), None)
+
     def __repr__(self):
         return "Asset:{}".format(self.name)
 
@@ -87,6 +104,7 @@ class Well(NodeMixin):
     def __init__(self, name=None, well_details=None, defaults=None):
         self.parent = None
         self.name = name
+        self.start_date = defaults['start date']
         if defaults:
             self.active_period = defaults['active period']
             self.choke = defaults['choke']
@@ -94,7 +112,6 @@ class Well(NodeMixin):
             self.active_period = 0
             self.choke = 0
         self._details = well_details
-        self._start_date = None
 
     @property
     def whp(self):

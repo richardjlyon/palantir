@@ -1,49 +1,5 @@
 #!/usr/bin/env python
-import pytest
-from anytree import findall
-from palantir import make_temp_file
-from palantir.manager import Manager
-
-# TODO move this to conftest.py
-
-simple = '''
-defaults:
-    well:
-        choke: 100
-        active period: 7300 # days
-        oil well:
-            ultimate oil recovery: 10000000
-            initial oil rate: 5000
-            gas oil ratio: [2000, 4000]
-            b oil: 1.0
-        gas well:
-            ultimate gas recovery: 0
-            initial gas rate: 0
-            gas condensate ratio: 0
-            b gas: 0
-facilities:
-    asset: MXII
-    pexes:
-        Nene:
-            WHP3:
-                NNM-301:
-                    type: oil
-                    oil rate: 5000
-                    oil cumulative: 667239
-                    gas rate: 6899247
-                    gas cumulative: 1479210651
-
-
-    '''
-
-@pytest.fixture()
-def manager():
-    global simple
-    configuration_file = make_temp_file(simple)
-    m = Manager(configuration_file.name)
-    yield m
-    configuration_file.close()
-
+from palantir.facilities import Well, WellHeadPlatform
 
 # asset = Asset('test_asset')
 # pex = Pex(name='test_pex')
@@ -53,16 +9,26 @@ def manager():
 
 class TestAsset:
 
-    def test_name(self, manager):
-        global asset
-        assert manager.asset.name == 'MXII'
+    def test_name(self, manager_test_program):
+        assert manager_test_program.asset.name == 'MXII'
 
-    def test_add_pex(self, manager):
-        global asset
-        global pex
-        asset.add_pex(pex)
-        pexes = findall(asset, filter_=lambda node: type(node).__name__ == "Pex")
-        assert len(pexes) > 0
+    def test_get_well_by_name(self, manager_test_program):
+        asset = manager_test_program.asset
+        well = asset.get_well_by_name('NNM-401')
+        assert isinstance(well, Well)
+        assert well.name == 'NNM-401'
+
+    def test_get_wellhead_platform_by_name(self, manager_test_program):
+        asset = manager_test_program.asset
+        wellhead_platform = asset.get_wellhead_platform_by_name('WHP4')
+        assert isinstance(wellhead_platform, WellHeadPlatform)
+        assert wellhead_platform.name == 'WHP4'
+
+    # def test_add_pex(self, manager_test_program):
+    #
+    #     asset.add_pex(pex)
+    #     pexes = findall(asset, filter_=lambda node: type(node).__name__ == "Pex")
+    #     assert len(pexes) > 0
 #
 #     def test_exception_if_not_pex(self,manager):
 #         global asset

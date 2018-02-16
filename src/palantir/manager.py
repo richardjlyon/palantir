@@ -1,5 +1,4 @@
 """Classes for parsing a configuration file and managing the creation of a forecast"""
-import re
 from datetime import datetime
 
 import yaml
@@ -7,15 +6,8 @@ from palantir.facilities import Asset, GasWell, OilWell, Pex, WellHeadPlatform
 from palantir.program import DrillStep, MoveStep, Program, Rig, StandbyStep, StartStep
 
 
-def validate(value):
-    """Do basic error checking and typecasting on value"""
-    result = value
-    if isinstance(value, str):
-        match = re.search(r'(\d+/\d+/\d+)', str(value))
-        if match:
-            result = datetime.strptime(value, "%d/%m/%Y")
-    return result
-
+def format_time_string(time_string):
+    return datetime.strptime(time_string, '%d/%m/%Y')
 
 class Manager:
     """Manages the production and exporting of a forecast"""
@@ -23,7 +15,7 @@ class Manager:
     def __init__(self, configuration_filepath):
         self.defaults = {}
         self.asset = None
-        self.programs = []
+        self.rig = None
         self.profiles = None
         self._config = None  # TODO remove this - should be defaults
 
@@ -33,6 +25,11 @@ class Manager:
 
     def _initialise_defaults(self, configuration_filepath):
         self._config = ConfigurationFile(configuration_filepath).yaml
+        # general defaults
+        description = self._config['description']
+        self.defaults['start date'] = format_time_string(description['start date'])
+
+        # well defaults
         well_defaults = self._config['defaults']['well']
         self.defaults['choke'] = well_defaults['choke']
         self.defaults['active period'] = well_defaults['active period']
@@ -78,21 +75,24 @@ class Manager:
             'standby': StandbyStep
         }
 
-        programs = self._config['programs']
+        if 'programs' in self._config:
+            programs = self._config['programs']
 
-        for rig_name, program_details in programs.items():
+            for rig_name, program_details in programs.items():
 
-            program = Program()
-            program.rig = Rig(name=rig_name)
+                self.rig = Rig(name=rig_name)
+                program = Program()
 
-            program_steps = program_details['program']
-            for step in program_steps:
-                elements = list(step.items())[0]
-                action = elements[0].lower()  # 'start'
-                parameters = elements[1]  # '01/01/2018'
+                program_steps = program_details['program']
+                for step in program_steps:
+                    elements = list(step.items())[0]
+                    action = elements[0].lower()  # 'start'
+                    parameters = elements[1]  # '01/01/2018'
 
-                step = commands[action](parameters=parameters)
-                program.add_step(step)
+                    step = commands[action](parameters=parameters, program=program)
+                    program.add_step(step)
+
+                self.programs.append(program)
 
 
 class ConfigurationFile:

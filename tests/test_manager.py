@@ -212,3 +212,14 @@ class TestConfigurationFile:
         # WHEN an option is requested
         # THEN return a string, integer, list, and date
         assert isinstance(simple_config['defaults']['well']['choke'], int)
+
+# class TestProgram:
+#
+#     def test_program_has_programs(self, manager_test_program):
+#         # TODO put this in test_manager :)
+#         assert len(manager_test_program.programs) > 0
+#         assert isinstance(manager_test_program.programs[0], Program)
+#
+#     def test_program_has_rig(self, manager_test_program):
+#         program = manager_test_program.programs[0]
+#         assert isinstance(program.rig, Rig)
