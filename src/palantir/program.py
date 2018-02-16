@@ -59,6 +59,7 @@ class StartStep(Step):
 class MoveStep(Step):
 
     def __init__(self, destination=None, duration=None, parameters=None):
+        super().__init__()
         self.destination = destination
         self.duration = duration
 
@@ -78,6 +79,7 @@ class MoveStep(Step):
 class StandbyStep(Step):
 
     def __init__(self, duration=None, parameters=None):
+        super().__init__()
         self.duration = duration
 
         if parameters:
@@ -92,7 +94,8 @@ class StandbyStep(Step):
 
 class DrillStep(Step):
 
-    def __init__(self, well=None, duration=None, parameters=None):  # TODO make this a default setting
+    def __init__(self, well=None, duration=None, parameters=None):
+        super().__init__()
         self.well = well
         self.duration = duration
 
