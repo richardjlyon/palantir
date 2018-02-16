@@ -1,56 +1,10 @@
 from datetime import datetime
 
-import pytest
-from palantir import make_temp_file
-from palantir.manager import Manager
 from palantir.profile import Profile
 from pytest import approx
 
-# TODO move this to conftest.py
 
-simple = '''
-defaults:
-    well:
-        choke: 100
-        active period: 7300 # days
-        oil well:
-            ultimate oil recovery: 10000000
-            initial oil rate: 5000
-            gas oil ratio: [2000, 4000]
-            b oil: 1.0
-        gas well:
-            ultimate gas recovery: 0
-            initial gas rate: 0
-            gas condensate ratio: 0
-            b gas: 0
-facilities:
-    asset: MXII
-    pexes:
-        Nene:
-            WHP3:
-                NNM-301:
-                    type: oil
-                    oil rate: 5000
-                    oil cumulative: 667239
-                    gas rate: 6899247
-                    gas cumulative: 1479210651
-drilling:
-    Rig1:
-        program:
-            - start: 01/01/2018, WHP3
-
-    '''
-
-@pytest.fixture()
-def manager():
-    global simple
-    configuration_file = make_temp_file(simple)
-    m = Manager(configuration_file.name)
-    yield m
-    configuration_file.close()
-
-
-class TestOilWEllProfile2:
+class TestOilWellProfile:
 
     def test_unconstrained__oil_rate(self, manager):
         # GIVEN an initialised, unconstrained oil well
