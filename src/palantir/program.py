@@ -19,7 +19,7 @@ class Program:
         self.steps = []
 
     def add_step(self, step):
-        step.program = self
+        step.program = self  # TODO what's this?
         self.steps.append(step)
 
     def execute(self):
@@ -34,6 +34,8 @@ class Step:
     def execute(self):
         raise NotImplementedError
 
+
+# TODO refactor parameter setting
 
 class StartStep(Step):
 
