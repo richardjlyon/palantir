@@ -11,11 +11,10 @@ def validate(value):
     """Do basic error checking and typecasting on value"""
     result = value
     if isinstance(value, str):
-        match = re.search(r'(\d+/\d+/\d+)', str(string))
+        match = re.search(r'(\d+/\d+/\d+)', str(value))
         if match:
-            result = datetime.strptime(string, "%d/%m/%Y")
+            result = datetime.strptime(value, "%d/%m/%Y")
     return result
-    return value
 
 
 class Manager:
@@ -94,7 +93,7 @@ class Manager:
                 rig.program.add_step(step)
 
 
-class ConfigurationFile():
+class ConfigurationFile:
     """Represents a configuration file"""
 
     def __init__(self, configuration_filepath):

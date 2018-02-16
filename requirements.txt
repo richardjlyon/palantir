@@ -1,3 +1,4 @@
+PyYAML
 pytest
 anytree
 # Add your pinned requirements so that they can be easily installed with:
