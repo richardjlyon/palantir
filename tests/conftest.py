@@ -1,19 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-    Dummy conftest.py for palantir.
 
-    If you don't know what this is for, just leave it empty.
-    Read more about conftest.py under:
-    https://pytest.org/latest/plugins.html
-"""
 from __future__ import absolute_import, division, print_function
 
 import pytest
 from palantir import make_temp_file
 from palantir.manager import Manager
 
-simple = '''
+
+@pytest.fixture()
+def manager_simple_configuration():
+    data = '''
 defaults:
     well:
         choke: 100
@@ -45,12 +42,7 @@ programs:
             - start: 01/01/2018, WHP3
 
     '''
-
-
-@pytest.fixture()
-def manager():
-    global simple
-    configuration_file = make_temp_file(simple)
+    configuration_file = make_temp_file(data)
     m = Manager(configuration_file.name)
     yield m
     configuration_file.close()
