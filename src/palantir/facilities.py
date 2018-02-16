@@ -123,6 +123,8 @@ class Well(NodeMixin):
         return "Well:{}".format(self.name)
 
 
+# TODO move gas to Well
+
 class OilWell(Well):
     """Represents an oil well in an Asset"""
 
