@@ -51,6 +51,7 @@ class Pex(NodeMixin):
     def __repr__(self):
         return "Pex:{}".format(self.name)
 
+
 class WellHeadPlatform(NodeMixin):
     """Represents a Wellhead Platform in an Asset"""
 
@@ -78,6 +79,7 @@ class WellHeadPlatform(NodeMixin):
 
     def __repr__(self):
         return "WellHeadPlatform:{}".format(self.name)
+
 
 class Well(NodeMixin):
     """Represents a Well in an Asset"""
@@ -132,6 +134,7 @@ class Well(NodeMixin):
 
     def __repr__(self):
         return "Well:{}".format(self.name)
+
 
 class OilWell(Well):
     """Represents an oil well in an Asset"""
