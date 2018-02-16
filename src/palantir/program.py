@@ -14,6 +14,7 @@ class Program:
     """Represents a rig program"""
 
     def __init__(self):
+        self.rig = None
         self.start_date = None
         self.elapsed_time = None
         self.steps = []
@@ -29,7 +30,7 @@ class Program:
 class Step:
     def __init__(self, name=None):
         self.name = name
-        self.program = None
+        self.elapsed_time = None
 
     def execute(self):
         raise NotImplementedError
