@@ -84,8 +84,6 @@ class WellHeadPlatform(NodeMixin):
 class Well(NodeMixin):
     """Represents a Well in an Asset"""
 
-    # {'type': 'oil', 'oil rate': 1964, 'oil cumulative': 2051240, 'gas rate': 8963974, 'gas cumulative': 7378218973}
-
     def __init__(self, name=None, well_details=None, defaults=None):
         self.parent = None
         self.name = name
@@ -97,17 +95,6 @@ class Well(NodeMixin):
             self.choke = 0
         self._details = well_details
         self._start_date = None
-
-    @property
-    def choke(self):
-        return self._choke
-
-    @choke.setter
-    def choke(self, value):
-        if isinstance(value, int):
-            self._choke = value
-        else:
-            raise ValueError("Couldn't set choke with type {}".format(type(value)))
 
     @property
     def whp(self):
