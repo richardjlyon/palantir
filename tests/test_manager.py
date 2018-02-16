@@ -3,6 +3,7 @@ from palantir import make_temp_file
 from palantir.facilities import Asset
 from palantir.manager import ConfigurationFile, Manager
 
+# TODO move this to conftest.py
 simple = '''
 defaults:
     well:
@@ -113,7 +114,6 @@ drilling:
             - drill: L15, 70
             - standby: 100
     '''
-
 
 @pytest.fixture()
 def simple_config():

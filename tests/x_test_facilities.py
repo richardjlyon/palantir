@@ -4,6 +4,8 @@ from anytree import findall
 from palantir import make_temp_file
 from palantir.manager import Manager
 
+# TODO move this to conftest.py
+
 simple = '''
 defaults:
     well:
@@ -33,7 +35,6 @@ facilities:
 
 
     '''
-
 
 @pytest.fixture()
 def manager():

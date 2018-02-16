@@ -6,6 +6,8 @@ from palantir.manager import Manager
 from palantir.profile import Profile
 from pytest import approx
 
+# TODO move this to conftest.py
+
 simple = '''
 defaults:
     well:
@@ -38,7 +40,6 @@ drilling:
             - start: 01/01/2018, WHP3
 
     '''
-
 
 @pytest.fixture()
 def manager():

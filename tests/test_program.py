@@ -4,6 +4,8 @@ import pytest
 from palantir.facilities import Well, WellHeadPlatform
 from palantir.program import DrillStep, MoveStep, Program, Rig, StandbyStep, StartStep
 
+# TODO move this to conftest.py
+
 simple = '''
 defaults:
     well:
@@ -114,7 +116,6 @@ drilling:
             - drill: L15, 70
             - standby: 100
     '''
-
 
 @pytest.fixture()
 def manager():
