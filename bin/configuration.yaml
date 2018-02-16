@@ -1,0 +1,15 @@
+defaults:
+    well:
+        choke: 100
+        active period: 3650 # days
+        oil well:
+            ultimate oil recovery: 8000000
+            initial oil rate: 5000
+            gas oil ratio: [2000, 4000]
+            b_oil: 1.0
+        gas well:
+            ultimate gas recovery: 0
+            initial gas rate: 0
+            gas condensate ratio: 0
+            b_gas: 0
+    Initial Oil Rate: 5000
