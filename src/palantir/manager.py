@@ -19,7 +19,7 @@ class Manager:
         self.rig = None
         self.profiles = None
 
-        self.defaults = {}
+        self.config = {}
         self._config = None  # TODO remove this - should be defaults
         self._load_configuration(configuration_filepath)
 
@@ -30,28 +30,30 @@ class Manager:
         self._config = ConfigurationFile(configuration_filepath).yaml
         # description
         description = self._config['description']
-        self.defaults['start date'] = format_time_string(description['start date'])
+        self.config['start date'] = format_time_string(description['start date'])
 
         # defaults
         well_defaults = self._config['defaults']['well']
-        self.defaults['choke'] = well_defaults['choke']
-        self.defaults['active period'] = well_defaults['active period']
-        self.defaults['ultimate oil recovery'] = well_defaults['oil well']['ultimate oil recovery']
-        self.defaults['initial oil rate'] = well_defaults['oil well']['initial oil rate']
-        self.defaults['gas oil ratio'] = well_defaults['oil well']['gas oil ratio']
-        self.defaults['b oil'] = well_defaults['oil well']['b oil']
-        self.defaults['ultimate gas recovery'] = well_defaults['gas well']['ultimate gas recovery']
-        self.defaults['initial gas rate'] = well_defaults['gas well']['initial gas rate']
-        self.defaults['gas condensate ratio'] = well_defaults['gas well']['gas condensate ratio']
-        self.defaults['b gas'] = well_defaults['gas well']['b gas']
+        self.config['choke'] = well_defaults['choke']
+        self.config['active period'] = well_defaults['active period']
+        self.config['ultimate oil recovery'] = well_defaults['oil well']['ultimate oil recovery']
+        self.config['initial oil rate'] = well_defaults['oil well']['initial oil rate']
+        self.config['gas oil ratio'] = well_defaults['oil well']['gas oil ratio']
+        self.config['b oil'] = well_defaults['oil well']['b oil']
+        self.config['ultimate gas recovery'] = well_defaults['gas well']['ultimate gas recovery']
+        self.config['initial gas rate'] = well_defaults['gas well']['initial gas rate']
+        self.config['gas condensate ratio'] = well_defaults['gas well']['gas condensate ratio']
+        self.config['b gas'] = well_defaults['gas well']['b gas']
 
         # facilities
         facilities = self._config['facilities']
-        self.defaults['asset'] = facilities['asset']
+        self.config['asset'] = facilities['asset']
+
+        # asset
 
     def _initialise_asset(self):
         facilities = self._config['facilities']
-        self.asset = Asset(name=facilities['asset'], defaults=self.defaults)
+        self.asset = Asset(self.config['asset'], defaults=self.config)
 
         for pex_name, whps in facilities['pexes'].items():
             pex = Pex(name=pex_name)
@@ -63,9 +65,9 @@ class Manager:
 
                 for well_name, well_details in wells.items():
                     if well_details['type'] == 'oil':
-                        well = OilWell(name=well_name, well_details=well_details, defaults=self.defaults)
+                        well = OilWell(name=well_name, well_details=well_details, defaults=self.config)
                     else:
-                        well = GasWell(name=well_name, well_details=well_details, defaults=self.defaults)
+                        well = GasWell(name=well_name, well_details=well_details, defaults=self.config)
                     whp.add_well(well)
 
     def _run_programs(self):
