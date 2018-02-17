@@ -2,7 +2,7 @@
 
 from palantir.configuration_manager import ConfigurationManager
 from palantir.facilities import Asset, GasWell, OilWell, Pex, WellHeadPlatform
-from palantir.program import DrillStep, MoveStep, Program, Rig, StandbyStep, StartStep
+from palantir.program import Program
 
 
 class Manager:
@@ -46,28 +46,9 @@ class Manager:
         # TODO get WellheadPlatform and Well objects, not names
         # TODO check WellheadPlatform exists and create if missing
 
-        commands = {
-            'start': StartStep,
-            'move': MoveStep,
-            'drill': DrillStep,
-            'standby': StandbyStep
-        }
-
         if 'programs' in self.config:
             programs = self.config['programs']
 
             for rig_name, program_details in programs.items():
-
-                self.rig = Rig(name=rig_name)
-                program = Program()
-
-                program_steps = program_details['program']
-                for step in program_steps:
-                    elements = list(step.items())[0]
-                    action = elements[0].lower()  # 'start'
-                    parameters = elements[1]  # '01/01/2018'
-
-                    step = commands[action](parameters=parameters, program=program)
-                    program.add_step(step)
-
+                program = Program(rig_name=rig_name, steps=program_details['program'])
                 self.programs.append(program)

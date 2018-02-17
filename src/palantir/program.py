@@ -7,18 +7,35 @@ class Rig:
 
     def __init__(self, name=None):
         self.name = name
-        self.program = Program()
 
 
 class Program:
     """Represents a rig program"""
 
-    def __init__(self):
-        self.rig = None
+    def __init__(self, rig_name=None, steps=None):
+        self.rig = Rig(name=rig_name)
         self.asset = None
         self.start_date = None
         self.elapsed_time = None
         self.steps = []
+
+        self._parse_program_steps(steps)
+
+    def _parse_program_steps(self, steps):
+        commands = {
+            'start': StartStep,
+            'move': MoveStep,
+            'drill': DrillStep,
+            'standby': StandbyStep
+        }
+
+        for step in steps:
+            elements = list(step.items())[0]
+            action = elements[0].lower()  # 'start'
+            parameters = elements[1]  # '01/01/2018'
+
+            step = commands[action](parameters=parameters, program=self)
+            self.add_step(step)
 
     def add_step(self, step):
         self.steps.append(step)
