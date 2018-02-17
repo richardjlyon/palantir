@@ -15,6 +15,7 @@ class Manager:
     def __init__(self, configuration_filepath):
         self.defaults = {}
         self.asset = None
+        self.programs = []
         self.rig = None
         self.profiles = None
         self._config = None  # TODO remove this - should be defaults
