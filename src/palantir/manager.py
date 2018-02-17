@@ -23,7 +23,7 @@ class Manager:
         self._config = None  # TODO remove this - should be defaults
         self._load_configuration(configuration_filepath)
 
-        self._initialise_asset()
+        self._initialise_facilities()
         self._run_programs()
 
     def _load_configuration(self, configuration_filepath):
@@ -48,14 +48,15 @@ class Manager:
         # facilities
         facilities = self._config['facilities']
         self.config['asset'] = facilities['asset']
+        self.config['pexes'] = facilities['pexes']
 
-        # asset
+        # programs
+        self.config['programs'] = self._config['programs']
 
-    def _initialise_asset(self):
-        facilities = self._config['facilities']
+    def _initialise_facilities(self):
         self.asset = Asset(self.config['asset'], defaults=self.config)
 
-        for pex_name, whps in facilities['pexes'].items():
+        for pex_name, whps in self.config['pexes'].items():
             pex = Pex(name=pex_name)
             self.asset.add_pex(pex)
 
@@ -84,8 +85,8 @@ class Manager:
             'standby': StandbyStep
         }
 
-        if 'programs' in self._config:
-            programs = self._config['programs']
+        if 'programs' in self.config:
+            programs = self.config['programs']
 
             for rig_name, program_details in programs.items():
 
