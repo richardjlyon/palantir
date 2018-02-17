@@ -1,37 +1,44 @@
 """A Class for manages a Palantir configuration file"""
-import re
-from collections.abc import Mapping
+
 from datetime import datetime
 
 import yaml
 
 
-def _is_date(self, string):
-    result = string
-    if isinstance(string, str):
-        match = re.search(r'(\d+/\d+/\d+)', str(string))
-        if match:
-            result = datetime.strptime(string, "%d/%m/%Y")
-    return result
+def format_time_string(time_string):
+    return datetime.strptime(time_string, '%d/%m/%Y')
 
 
-class ConfigurationManager(Mapping):
-    """Managers accessing a configuration file
-       See: http://www.kr41.net/2016/03-23-dont_inherit_python_builtin_dict_type.html
-    """
+class ConfigurationManager:
+    """Represents a configuration file"""
 
     def __init__(self, configuration_filepath):
+        self.config = {}
+
         with open(configuration_filepath) as yaml_file:
-            self._storage = yaml.load(yaml_file)
+            cfg = yaml.load(yaml_file)
 
-    def __getitem__(self, key):
-        if key in self._storage:
-            return self._storage[key]
-        else:
-            return None
+        # description
+        description = cfg['description']
+        self.config['start date'] = format_time_string(description['start date'])
 
-    def __iter__(self):
-        return iter(self._storage)
+        # defaults
+        well_defaults = cfg['defaults']['well']
+        self.config['choke'] = well_defaults['choke']
+        self.config['active period'] = well_defaults['active period']
+        self.config['ultimate oil recovery'] = well_defaults['oil well']['ultimate oil recovery']
+        self.config['initial oil rate'] = well_defaults['oil well']['initial oil rate']
+        self.config['gas oil ratio'] = well_defaults['oil well']['gas oil ratio']
+        self.config['b oil'] = well_defaults['oil well']['b oil']
+        self.config['ultimate gas recovery'] = well_defaults['gas well']['ultimate gas recovery']
+        self.config['initial gas rate'] = well_defaults['gas well']['initial gas rate']
+        self.config['gas condensate ratio'] = well_defaults['gas well']['gas condensate ratio']
+        self.config['b gas'] = well_defaults['gas well']['b gas']
 
-    def __len__(self):
-        return len(self._storage)
+        # facilities
+        facilities = cfg['facilities']
+        self.config['asset'] = facilities['asset']
+        self.config['pexes'] = facilities['pexes']
+
+        # programs
+        self.config['programs'] = cfg['programs']

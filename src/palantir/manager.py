@@ -1,13 +1,8 @@
 """Classes for parsing a configuration file and managing the creation of a forecast"""
-from datetime import datetime
 
-import yaml
+from palantir.configuration_manager import ConfigurationManager
 from palantir.facilities import Asset, GasWell, OilWell, Pex, WellHeadPlatform
 from palantir.program import DrillStep, MoveStep, Program, Rig, StandbyStep, StartStep
-
-
-def format_time_string(time_string):
-    return datetime.strptime(time_string, '%d/%m/%Y')
 
 
 class Manager:
@@ -19,39 +14,11 @@ class Manager:
         self.rig = None
         self.profiles = None
 
-        self.config = {}
-        self._config = None  # TODO remove this - should be defaults
-        self._load_configuration(configuration_filepath)
+        configuration_manager = ConfigurationManager(configuration_filepath)
+        self.config = configuration_manager.config
 
         self._initialise_facilities()
         self._run_programs()
-
-    def _load_configuration(self, configuration_filepath):
-        self._config = ConfigurationFile(configuration_filepath).yaml
-        # description
-        description = self._config['description']
-        self.config['start date'] = format_time_string(description['start date'])
-
-        # defaults
-        well_defaults = self._config['defaults']['well']
-        self.config['choke'] = well_defaults['choke']
-        self.config['active period'] = well_defaults['active period']
-        self.config['ultimate oil recovery'] = well_defaults['oil well']['ultimate oil recovery']
-        self.config['initial oil rate'] = well_defaults['oil well']['initial oil rate']
-        self.config['gas oil ratio'] = well_defaults['oil well']['gas oil ratio']
-        self.config['b oil'] = well_defaults['oil well']['b oil']
-        self.config['ultimate gas recovery'] = well_defaults['gas well']['ultimate gas recovery']
-        self.config['initial gas rate'] = well_defaults['gas well']['initial gas rate']
-        self.config['gas condensate ratio'] = well_defaults['gas well']['gas condensate ratio']
-        self.config['b gas'] = well_defaults['gas well']['b gas']
-
-        # facilities
-        facilities = self._config['facilities']
-        self.config['asset'] = facilities['asset']
-        self.config['pexes'] = facilities['pexes']
-
-        # programs
-        self.config['programs'] = self._config['programs']
 
     def _initialise_facilities(self):
         self.asset = Asset(self.config['asset'], defaults=self.config)
@@ -103,15 +70,3 @@ class Manager:
                     program.add_step(step)
 
                 self.programs.append(program)
-
-
-class ConfigurationFile:
-    """Represents a configuration file"""
-
-    def __init__(self, configuration_filepath):
-        self.yaml = None
-        self._parse_configuration(configuration_filepath)
-
-    def _parse_configuration(self, configuration_filepath):
-        with open(configuration_filepath) as yaml_file:
-            self.yaml = yaml.load(yaml_file)
