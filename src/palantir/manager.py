@@ -9,13 +9,14 @@ class Manager:
     """Manages the production and exporting of a forecast"""
 
     def __init__(self, configuration_filepath):
+
+        configuration_manager = ConfigurationManager(configuration_filepath)
+        self.config = configuration_manager.config
+
         self.asset = None
         self.programs = []
         self.rig = None
         self.profiles = None
-
-        configuration_manager = ConfigurationManager(configuration_filepath)
-        self.config = configuration_manager.config
 
         self._initialise_facilities()
         self._run_programs()
