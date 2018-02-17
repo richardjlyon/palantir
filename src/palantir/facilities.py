@@ -54,16 +54,16 @@ class Pex(NodeMixin):
         self.parent = None
         self.name = name
 
+    @property
+    def wellhead_platforms(self):
+        return findall(self, filter_=lambda node: type(node).__name__ == "WellHeadPlatform")
+
     def add_wellhead_platform(self, wellhead_platform):
         if isinstance(wellhead_platform, WellHeadPlatform):
             wellhead_platform.parent = self
             return self
         else:
             raise ValueError("Can't add {} to Pex".format(type(wellhead_platform)))
-
-    @property
-    def wellhead_platforms(self):
-        return findall(self, filter_=lambda node: type(node).__name__ == "WellHeadPlatform")
 
     def __repr__(self):
         return "Pex:{}".format(self.name)
@@ -77,13 +77,6 @@ class WellHeadPlatform(NodeMixin):
         self.name = name
         self.well_slots = well_slots
 
-    def add_well(self, well):
-        if isinstance(well, Well):
-            well.parent = self
-            return self
-        else:
-            raise ValueError("Can't add {} to Wellhead Platform".format(type(well)))
-
     @property
     def wells(self):
         oil_wells = findall(self, filter_=lambda node: type(node).__name__ == "OilWell")
@@ -93,6 +86,14 @@ class WellHeadPlatform(NodeMixin):
     @property
     def remaining_slots(self):
         return self.well_slots - len(self.wells)
+
+    def add_well(self, well):
+        if isinstance(well, Well):
+            well.parent = self
+            return self
+        else:
+            raise ValueError("Can't add {} to Wellhead Platform".format(type(well)))
+        return oil_wells + gas_wells
 
     def __repr__(self):
         return "WellHeadPlatform:{}".format(self.name)
@@ -104,11 +105,12 @@ class Well(NodeMixin):
     def __init__(self, name=None, well_details=None, defaults=None):
         self.parent = None
         self.name = name
-        self.start_date = defaults['start date']
         if defaults:
+            self.start_date = defaults['start date']
             self.active_period = defaults['active period']
             self.choke = defaults['choke']
         else:
+            self.start_date = datetime.now()
             self.active_period = 0
             self.choke = 0
         self._details = well_details
@@ -125,16 +127,16 @@ class Well(NodeMixin):
     def asset(self):
         return self.pex.parent
 
-    @property
-    def start_date(self):
-        return self._start_date
-
-    @start_date.setter
-    def start_date(self, value):
-        if isinstance(value, datetime):
-            self._start_date = value
-        else:
-            raise ValueError("Couldn't set start_date with type {}".format(type(value)))
+    # @property
+    # def start_date(self):
+    #     return self._start_date
+    #
+    # @start_date.setter
+    # def start_date(self, value):
+    #     if isinstance(value, datetime):
+    #         self._start_date = value
+    #     else:
+    #         raise ValueError("Couldn't set start_date with type {}".format(type(value)))
 
     def __repr__(self):
         return "Well:{}".format(self.name)

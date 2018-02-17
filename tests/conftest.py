@@ -49,7 +49,7 @@ programs:
 
 
 @pytest.fixture()
-def manager_full_configuration():
+def manager():
     data = '''
 description:
     start date: 01/01/2018
@@ -63,10 +63,10 @@ defaults:
             gas oil ratio: [2000, 4000]
             b oil: 1.0
         gas well:
-            ultimate gas recovery: 0
-            initial gas rate: 0
-            gas condensate ratio: 0
-            b gas: 0
+            ultimate gas recovery: 100000000
+            initial gas rate: 10000000
+            gas condensate ratio: 3.1415
+            b gas: 0.5
 facilities:
     asset: MXII
     pexes:
