@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pytest
 from palantir.facilities import Asset, OilWell, Pex, WellHeadPlatform
 
 
@@ -36,6 +37,10 @@ class TestAsset:
         manager.asset.add_pex(pex)
         assert len(manager.asset.pexes) == pex_count + 1
 
+    def test_exception_adding_non_pex(self, manager):
+        with pytest.raises(ValueError):
+            manager.asset.add_pex('Not a Pex')
+
 
 class TestPex:
 
@@ -54,6 +59,10 @@ class TestPex:
         whp = WellHeadPlatform(name='New Wellhead Platform')
         manager.asset.pexes[0].add_wellhead_platform(whp)
         assert len(manager.asset.pexes[0].wellhead_platforms) == wellhead_platform_count + 1
+
+    def test_exception_adding_non_whp(self, manager):
+        with pytest.raises(ValueError):
+            manager.asset.pexes[0].add_wellhead_platform('Not a Wellhead Platform')
 
 
 class TestWellheadPlatform:
@@ -90,6 +99,10 @@ class TestWellheadPlatform:
         well = OilWell(name='New Well', well_details=well_details, defaults=defaults)
         whp.add_well(well)
         assert len(whp.wells) == well_count + 1
+
+    def test_exception_adding_non_well(self, manager):
+        with pytest.raises(ValueError):
+            manager.asset.pexes[0].wellhead_platforms[0].add_well('Not a well')
 
 
 class TestWell:

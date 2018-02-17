@@ -43,7 +43,7 @@ class Asset(NodeMixin):
     def get_well_by_name(self, well_name):
         return next((well for well in self.wells if well.name == well_name), None)
 
-    def __repr__(self):
+    def __str__(self):
         return "Asset:{}".format(self.name)
 
 
@@ -110,6 +110,7 @@ class Well(NodeMixin):
             self.active_period = defaults['active period']
             self.choke = defaults['choke']
         else:
+            # TODO check this logic = should they be None?
             self.start_date = datetime.now()
             self.active_period = 0
             self.choke = 0
