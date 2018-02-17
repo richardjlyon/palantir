@@ -12,9 +12,9 @@ class Rig:
 class Program:
     """Represents a rig program"""
 
-    def __init__(self, rig_name=None, steps=None):
+    def __init__(self, asset=None, rig_name=None, steps=None):
+        self.asset = asset
         self.rig = Rig(name=rig_name)
-        self.asset = None
         self.start_date = None
         self.elapsed_time = None
         self.steps = []
@@ -52,11 +52,10 @@ def get_parameters(string):
 
 
 class Step:
-    def __init__(self, name=None):
-        self.name = name  # TODO what's this?
+    def __init__(self, program=None):
+        self.program = program
         self.elapsed_time = None
         self.asset = None
-        self._program = None
 
     def execute(self):
         raise NotImplementedError
@@ -67,8 +66,7 @@ class Step:
 class StartStep(Step):
 
     def __init__(self, parameters=None, program=None):
-        super().__init__()
-        self.program = program
+        super().__init__(program=program)
         self.start_date = None
         self.location = None
 
@@ -79,10 +77,10 @@ class StartStep(Step):
             self.location = wellhead_platform_name  # TODO fix this
 
     def execute(self):
-        self.program.elapsed_time = 0
         self.elapsed_time = 0
+        self.program.elapsed_time = 0
         self.program.start_date = self.start_date
-        self.program.location = self.location
+        self.program.location = self.program.asset.get_wellhead_platform_by_name(self.location)
 
     def __str__(self):
         return "START: {}, {}".format(self.start_date, self.location)

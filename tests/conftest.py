@@ -128,9 +128,7 @@ programs:
     configuration_file.close()
 
 
-@pytest.fixture()
-def program():
-    data = '''
+data_header = """
 description:
     start date: 01/01/2018
 defaults:
@@ -165,14 +163,20 @@ facilities:
                     oil cumulative: 507833
                     gas rate: 16000000
                     gas cumulative: 1313829371
+
+"""
+
+@pytest.fixture()
+def program_step_1():
+    data = data_header + '''
 programs:
     Rig1:
         program:
             - start: 01/01/2018, AEP
-            - drill: NNM-7, 70
-            - move: WHP4, 30
-            - drill: NNM-402, 70
-            - standby: 100
+            # - drill: NNM-7, 70
+            # - move: WHP4, 30
+            # - drill: NNM-402, 70
+            # - standby: 100
 '''
     configuration_file = make_temp_file(data)
     m = Manager(configuration_file.name)
