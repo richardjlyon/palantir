@@ -9,28 +9,30 @@ from palantir.program import DrillStep, MoveStep, Program, Rig, StandbyStep, Sta
 def format_time_string(time_string):
     return datetime.strptime(time_string, '%d/%m/%Y')
 
+
 class Manager:
     """Manages the production and exporting of a forecast"""
 
     def __init__(self, configuration_filepath):
-        self.defaults = {}
         self.asset = None
         self.programs = []
         self.rig = None
         self.profiles = None
-        self._config = None  # TODO remove this - should be defaults
 
-        self._initialise_defaults(configuration_filepath)
+        self.defaults = {}
+        self._config = None  # TODO remove this - should be defaults
+        self._load_configuration(configuration_filepath)
+
         self._initialise_asset()
         self._run_programs()
 
-    def _initialise_defaults(self, configuration_filepath):
+    def _load_configuration(self, configuration_filepath):
         self._config = ConfigurationFile(configuration_filepath).yaml
-        # general defaults
+        # description
         description = self._config['description']
         self.defaults['start date'] = format_time_string(description['start date'])
 
-        # well defaults
+        # defaults
         well_defaults = self._config['defaults']['well']
         self.defaults['choke'] = well_defaults['choke']
         self.defaults['active period'] = well_defaults['active period']
@@ -42,6 +44,10 @@ class Manager:
         self.defaults['initial gas rate'] = well_defaults['gas well']['initial gas rate']
         self.defaults['gas condensate ratio'] = well_defaults['gas well']['gas condensate ratio']
         self.defaults['b gas'] = well_defaults['gas well']['b gas']
+
+        # facilities
+        facilities = self._config['facilities']
+        self.defaults['asset'] = facilities['asset']
 
     def _initialise_asset(self):
         facilities = self._config['facilities']
