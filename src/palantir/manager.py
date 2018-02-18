@@ -50,5 +50,6 @@ class Manager:
             programs = self.config['programs']
 
             for rig_name, program_details in programs.items():
-                program = Program(asset=self.asset, rig_name=rig_name, steps=program_details['program'])
+                program = Program(asset=self.asset, config=self.config, rig_name=rig_name,
+                                  steps=program_details['program'])
                 self.programs.append(program)

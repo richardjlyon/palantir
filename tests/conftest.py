@@ -112,14 +112,14 @@ programs:
     Rig1:
         program:
             - start: 01/01/2018, WHP3
-            - drill: NNM-305, 70
-            - drill: NNM-306, 70
+            - drill: NNM-305, oil, 70
+            - drill: NNM-306, oil, 70
             - move: WHP4, 30
-            - drill: NNM-405, 70
-            - drill: NNM-406, 70
+            - drill: NNM-405, oil, 70
+            - drill: NNM-406, oil, 70
             - move: WHPL1, 30
-            - drill: L14, 70
-            - drill: L15, 70
+            - drill: L14, gas, 70
+            - drill: L15, gas, 70
             - standby: 100
 '''
     configuration_file = make_temp_file(data)
@@ -167,18 +167,19 @@ facilities:
 """
 
 @pytest.fixture()
-def program_step_1():
+def program_steps():
     data = data_header + '''
 programs:
     Rig1:
         program:
             - start: 01/01/2018, AEP
-            # - drill: NNM-7, 70
-            # - move: WHP4, 30
-            # - drill: NNM-402, 70
-            # - standby: 100
+            - drill: NNM-7, oil, 70
+            - move: WHP4, 30
+            - drill: NNM-402, gas, 70
+            - standby: 100
 '''
     configuration_file = make_temp_file(data)
     m = Manager(configuration_file.name)
     yield m
     configuration_file.close()
+

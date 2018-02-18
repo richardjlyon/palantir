@@ -1,19 +1,23 @@
 """Classes that represent a Rig and associated rig Program"""
 from datetime import datetime, timedelta
 
+from palantir.facilities import GasWell, OilWell
+
 
 class Rig:
     """Represents a drilling rig"""
 
     def __init__(self, name=None):
         self.name = name
+        self.location = None
 
 
 class Program:
     """Represents a rig program"""
 
-    def __init__(self, asset=None, rig_name=None, steps=None):
+    def __init__(self, asset=None, config=None, rig_name=None, steps=None):
         self.asset = asset
+        self.config = config
         self.rig = Rig(name=rig_name)
         self.start_date = None
         self.elapsed_time = None
@@ -53,9 +57,9 @@ def get_parameters(string):
 
 class Step:
     def __init__(self, program=None):
+        self.asset = None
         self.program = program
         self.elapsed_time = None
-        self.asset = None
 
     def execute(self):
         raise NotImplementedError
@@ -73,14 +77,13 @@ class StartStep(Step):
         if parameters:
             date_string, wellhead_platform_name = get_parameters(parameters)
             self.start_date = datetime.strptime(date_string, "%d/%m/%Y")
-            whp = self.asset
-            self.location = wellhead_platform_name  # TODO fix this
+            self.location = wellhead_platform_name
 
     def execute(self):
         self.elapsed_time = 0
         self.program.elapsed_time = 0
         self.program.start_date = self.start_date
-        self.program.location = self.program.asset.get_wellhead_platform_by_name(self.location)
+        self.program.rig.location = self.program.asset.get_wellhead_platform_by_name(self.location)
 
     def __str__(self):
         return "START: {}, {}".format(self.start_date, self.location)
@@ -89,31 +92,37 @@ class StartStep(Step):
 class DrillStep(Step):
 
     def __init__(self, parameters=None, program=None):
-        super().__init__()
-        self.program = program
-        self.well = None
+        super().__init__(program=program)
+        self.well_name = None
+        self.type = None
         self.duration = None
 
         if parameters:
-            well_name, duration = get_parameters(parameters)
-            self.well = well_name
+            well_name, type, duration = get_parameters(parameters)
+            self.well_name = well_name
+            self.type = type
             self.duration = int(duration)
 
     def execute(self):
+
         self.elapsed_time = self.program.elapsed_time
         well_start_date = self.program.start_date + timedelta(days=self.elapsed_time)
-        self.program.location.add_well(self.well)
+
+        if self.type == 'oil':
+            well = OilWell(name=self.well_name, start_date=well_start_date, defaults=self.program.config)
+        else:
+            well = GasWell(name=self.well_name, start_date=well_start_date, defaults=self.program.config)
+        self.program.rig.location.add_well(well)
         self.program.elapsed_time += self.duration
 
     def __str__(self):
-        return "DRILL: {}, {}".format(self.well, self.duration)
+        return "DRILL: {}, {}, {}".format(self.well_name, self.type, self.duration)
 
 
 class MoveStep(Step):
 
     def __init__(self, parameters=None, program=None):
-        super().__init__()
-        self.program = program
+        super().__init__(program=program)
         self.destination = None
         self.duration = None
 
@@ -123,7 +132,8 @@ class MoveStep(Step):
             self.duration = int(duration)
 
     def execute(self):
-        self.program.location = self.destination
+        self.elapsed_time = self.program.elapsed_time
+        self.program.rig.location = self.program.asset.get_wellhead_platform_by_name(self.destination)
         self.program.elapsed_time += self.duration
 
     def __str__(self):
@@ -133,14 +143,14 @@ class MoveStep(Step):
 class StandbyStep(Step):
 
     def __init__(self, parameters=None, program=None):
-        super().__init__()
-        self.program = program
+        super().__init__(program=program)
         self.duration = None
 
         if parameters:
             self.duration = int(parameters)
 
     def execute(self):
+        self.elapsed_time = self.program.elapsed_time
         self.program.elapsed_time += self.duration
 
     def __str__(self):

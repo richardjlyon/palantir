@@ -118,7 +118,7 @@ class TestWell:
 
     def test_start_date(self, manager):
         well = manager.asset.get_well_by_name('NNM-3')
-        assert well.start_date == datetime(2018, 1, 1)
+        assert well.start_date == None
 
     def test_active_period(self, manager):
         well = manager.asset.get_well_by_name('NNM-3')

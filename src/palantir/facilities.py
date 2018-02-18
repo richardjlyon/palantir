@@ -1,7 +1,5 @@
 """ Classes that represent physical facilities"""
 
-from datetime import datetime
-
 from anytree import NodeMixin, findall
 
 DEFAULT_SLOTS = 6  # TODO Fix
@@ -102,19 +100,21 @@ class WellHeadPlatform(NodeMixin):
 class Well(NodeMixin):
     """Represents a Well in an Asset"""
 
-    def __init__(self, name=None, well_details=None, defaults=None):
+    def __init__(self, name=None, start_date=None, well_details=None, defaults=None):
+
         self.parent = None
         self.name = name
+        self.active_period = None
+        self.choke = None
+
+        self._details = well_details  # TODO test initialising with well details
+
         if defaults:
             self.start_date = defaults['start date']
             self.active_period = defaults['active period']
             self.choke = defaults['choke']
-        else:
-            # TODO check this logic = should they be None?
-            self.start_date = datetime.now()
-            self.active_period = 0
-            self.choke = 0
-        self._details = well_details
+
+        self.start_date = start_date
 
     @property
     def whp(self):
@@ -128,17 +128,6 @@ class Well(NodeMixin):
     def asset(self):
         return self.pex.parent
 
-    # @property
-    # def start_date(self):
-    #     return self._start_date
-    #
-    # @start_date.setter
-    # def start_date(self, value):
-    #     if isinstance(value, datetime):
-    #         self._start_date = value
-    #     else:
-    #         raise ValueError("Couldn't set start_date with type {}".format(type(value)))
-
     def __repr__(self):
         return "Well:{}".format(self.name)
 
@@ -148,32 +137,34 @@ class Well(NodeMixin):
 class OilWell(Well):
     """Represents an oil well in an Asset"""
 
-    def __init__(self, name=None, well_details=None, defaults=None):
-        super().__init__(name=name, well_details=well_details, defaults=defaults)
+    def __init__(self, name=None, start_date=None, well_details=None, defaults=None):
+        super().__init__(name=name, start_date=start_date, well_details=well_details, defaults=defaults)
         # defaults
         self.ultimate_oil_recovery = defaults['ultimate oil recovery']
         self.initial_oil_rate = defaults['initial oil rate']
         self.gas_oil_ratio = defaults['gas oil ratio']
         self.b_oil = defaults['b oil']
         # details
-        self.oil_rate = well_details['oil rate']
-        self.oil_cumulative = well_details['oil cumulative']
-        self.gas_rate = well_details['gas rate']
-        self.gas_cumulative = well_details['gas cumulative']
+        if well_details:
+            self.oil_rate = well_details['oil rate']
+            self.oil_cumulative = well_details['oil cumulative']
+            self.gas_rate = well_details['gas rate']
+            self.gas_cumulative = well_details['gas cumulative']
 
 
 class GasWell(Well):
     """Represents a gas well in an Asset"""
 
-    def __init__(self, name=None, well_details=None, defaults=None):
-        super().__init__(name=name, well_details=well_details, defaults=defaults)
+    def __init__(self, name=None, start_date=None, well_details=None, defaults=None):
+        super().__init__(name=name, start_date=start_date, well_details=well_details, defaults=defaults)
         # defaults
         self.ultimate_gas_recovery = defaults['ultimate gas recovery']
         self.initial_gas_rate = defaults['initial gas rate']
         self.gas_condensate_ratio = defaults['gas condensate ratio']
         self.b_gas = defaults['b gas']
         # details
-        self.condensate_rate = well_details['condensate rate']
-        self.condensate_cumulative = well_details['condensate cumulative']
-        self.gas_rate = well_details['gas rate']
-        self.gas_cumulative = well_details['gas cumulative']
+        if well_details:
+            self.condensate_rate = well_details['condensate rate']
+            self.condensate_cumulative = well_details['condensate cumulative']
+            self.gas_rate = well_details['gas rate']
+            self.gas_cumulative = well_details['gas cumulative']
