@@ -104,17 +104,23 @@ class Well(NodeMixin):
 
         self.parent = None
         self.name = name
+        self.start_date = None
+        self.well_details = well_details
         self.active_period = None
         self.choke = None
+        self.is_new_well = None
 
-        self._details = well_details  # TODO test initialising with well details
+        if well_details:
+            self.is_new_well = False
+            self.start_date = config['start date']
+        else:
+            self.is_new_well = True
+            self.start_date = start_date
 
         if config:
-            self.start_date = config['start date']
             self.active_period = config['active period']
             self.choke = config['choke']
 
-        self.start_date = start_date
 
     @property
     def whp(self):
@@ -146,6 +152,7 @@ class OilWell(Well):
         self.b_oil = config['b oil']
         # details
         if well_details:
+            # It's an existing well
             self.oil_rate = well_details['oil rate']
             self.oil_cumulative = well_details['oil cumulative']
             self.gas_rate = well_details['gas rate']
