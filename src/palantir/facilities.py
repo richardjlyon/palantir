@@ -100,7 +100,7 @@ class WellHeadPlatform(NodeMixin):
 class Well(NodeMixin):
     """Represents a Well in an Asset"""
 
-    def __init__(self, name=None, start_date=None, well_details=None, defaults=None):
+    def __init__(self, name=None, start_date=None, well_details=None, config=None):
 
         self.parent = None
         self.name = name
@@ -109,10 +109,10 @@ class Well(NodeMixin):
 
         self._details = well_details  # TODO test initialising with well details
 
-        if defaults:
-            self.start_date = defaults['start date']
-            self.active_period = defaults['active period']
-            self.choke = defaults['choke']
+        if config:
+            self.start_date = config['start date']
+            self.active_period = config['active period']
+            self.choke = config['choke']
 
         self.start_date = start_date
 
@@ -137,13 +137,13 @@ class Well(NodeMixin):
 class OilWell(Well):
     """Represents an oil well in an Asset"""
 
-    def __init__(self, name=None, start_date=None, well_details=None, defaults=None):
-        super().__init__(name=name, start_date=start_date, well_details=well_details, defaults=defaults)
+    def __init__(self, name=None, start_date=None, well_details=None, config=None):
+        super().__init__(name=name, start_date=start_date, well_details=well_details, config=config)
         # defaults
-        self.ultimate_oil_recovery = defaults['ultimate oil recovery']
-        self.initial_oil_rate = defaults['initial oil rate']
-        self.gas_oil_ratio = defaults['gas oil ratio']
-        self.b_oil = defaults['b oil']
+        self.ultimate_oil_recovery = config['ultimate oil recovery']
+        self.initial_oil_rate = config['initial oil rate']
+        self.gas_oil_ratio = config['gas oil ratio']
+        self.b_oil = config['b oil']
         # details
         if well_details:
             self.oil_rate = well_details['oil rate']
@@ -155,13 +155,13 @@ class OilWell(Well):
 class GasWell(Well):
     """Represents a gas well in an Asset"""
 
-    def __init__(self, name=None, start_date=None, well_details=None, defaults=None):
-        super().__init__(name=name, start_date=start_date, well_details=well_details, defaults=defaults)
+    def __init__(self, name=None, start_date=None, well_details=None, config=None):
+        super().__init__(name=name, start_date=start_date, well_details=well_details, config=config)
         # defaults
-        self.ultimate_gas_recovery = defaults['ultimate gas recovery']
-        self.initial_gas_rate = defaults['initial gas rate']
-        self.gas_condensate_ratio = defaults['gas condensate ratio']
-        self.b_gas = defaults['b gas']
+        self.ultimate_gas_recovery = config['ultimate gas recovery']
+        self.initial_gas_rate = config['initial gas rate']
+        self.gas_condensate_ratio = config['gas condensate ratio']
+        self.b_gas = config['b gas']
         # details
         if well_details:
             self.condensate_rate = well_details['condensate rate']

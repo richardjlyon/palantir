@@ -41,4 +41,5 @@ class ConfigurationManager:
         self.config['pexes'] = facilities['pexes']
 
         # programs
-        self.config['programs'] = cfg['programs']
+        if 'programs' in cfg:
+            self.config['programs'] = cfg['programs']

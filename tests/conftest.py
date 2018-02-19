@@ -183,3 +183,39 @@ programs:
     yield m
     configuration_file.close()
 
+
+@pytest.fixture()
+def profile_single_existing_well():
+    data = """
+description:
+    start date: 01/01/2018
+defaults:
+    well:
+        choke: 100
+        active period: 3650 # days
+        oil well:
+            ultimate oil recovery: 8000000
+            initial oil rate: 5000
+            gas oil ratio: [2000, 4000]
+            b oil: 1.0
+        gas well:
+            ultimate gas recovery: 100000000
+            initial gas rate: 10000000
+            gas condensate ratio: 3.1415
+            b gas: 0.5
+facilities:
+    asset: MXII
+    pexes:
+        Nene:
+            AEP:
+                NNM-3:
+                    type: oil
+                    oil rate: 1851
+                    oil cumulative: 2846703
+                    gas rate: 2072000
+                    gas cumulative: 4845154174
+    """
+    configuration_file = make_temp_file(data)
+    m = Manager(configuration_file.name)
+    yield m
+    configuration_file.close()
