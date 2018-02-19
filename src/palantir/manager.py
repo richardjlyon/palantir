@@ -1,9 +1,8 @@
 """Classes for parsing a configuration file and managing the creation of a forecast"""
 
-import pandas as pd
 from palantir.configuration_manager import ConfigurationManager
 from palantir.facilities import Asset, GasWell, OilWell, Pex, WellHeadPlatform
-from palantir.profile import Profile
+from palantir.profile import Profiles
 from palantir.program import Program
 
 
@@ -18,7 +17,7 @@ class Manager:
         self.asset = None
         self.programs = []
         self.rig = None
-        self.profiles = pd.DataFrame()
+        self.profiles = Profiles()
 
         self._initialise_facilities()
         self._run_programs()
@@ -59,5 +58,4 @@ class Manager:
     def _initialise_profiles(self):
         """Build composite profile DataFrame from individual wells"""
         for well in self.asset.wells:
-            well_curves = Profile(well=well).curves
-            self.profiles = self.profiles.append(well_curves)
+            self.profiles.add(well)

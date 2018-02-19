@@ -19,6 +19,33 @@ def _zero_function(di, t, qoi, b, uor):
     return qo.sum() - uor
 
 
+class Profiles:
+    """Represents aggregated production profiles"""
+
+    def __init__(self):
+        self.curves = pd.DataFrame()
+
+    def add(self, well):
+        well_curves = Profile(well=well).curves
+        self.curves = self.curves.append(well_curves)
+
+    @property
+    def field_production(self):
+        return self.curves.groupby(['date'])['qo', 'qg'].sum()
+
+    @property
+    def pex_production(self):
+        return self.curves.groupby(['date', 'pex'])['qo', 'qg'].sum().unstack(fill_value=0)
+
+    @property
+    def whp_production(self):
+        return self.curves.groupby(['date', 'whp'])['qo', 'qg'].sum().unstack(fill_value=0)
+
+    @property
+    def well_production(self):
+        return self.curves.groupby(['date', 'well'])['qo', 'qg'].sum().unstack(fill_value=0)
+
+
 class Profile:
     """Represents a production profile for a Well"""
 
