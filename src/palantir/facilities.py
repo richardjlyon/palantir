@@ -147,8 +147,7 @@ class OilWell(Well):
             # It's an existing well
             self.oil_rate = well_details['oil rate']
             self.oil_cumulative = well_details['oil cumulative']
-            self.gas_rate = well_details['gas rate']
-            self.gas_cumulative = well_details['gas cumulative']
+            self.gas_oil_ratio = well_details['gas oil ratio']
 
 
 class GasWell(Well):

@@ -36,70 +36,59 @@ facilities:
                     type: oil
                     oil rate: 1851
                     oil cumulative: 2846703
-                    gas rate: 2072000
-                    gas cumulative: 4845154174
+                    gas oil ratio: [2000, 4000]
                 NNM-5:
                     type: oil
                     oil rate: 198
                     oil cumulative: 458645
-                    gas rate: 197634
-                    gas cumulative: 458638676
+                    gas oil ratio: [2000, 4000]
                 NNM-6:
                     type: oil
                     oil rate: 1964
                     oil cumulative: 2051240
-                    gas rate: 8963974
-                    gas cumulative: 7378218973
+                    gas oil ratio: [2000, 4000]
             WHP4:
                 NNM-401:
                     type: oil
                     oil rate: 4000
                     oil cumulative: 507833
-                    gas rate: 16000000
-                    gas cumulative: 1313829371
+                    gas oil ratio: [2000, 4000]
                 NNM-402:
                     type: oil
                     oil rate: 1011
                     oil cumulative: 444514
-                    gas rate: 4074000
-                    gas cumulative: 1720575712
+                    gas oil ratio: [2000, 4000]
                 NNM-403:
                     type: oil
                     oil rate: 2943
                     oil cumulative: 639181
-                    gas rate: 12942758
-                    gas cumulative: 3289178468
+                    gas oil ratio: [2000, 4000]
                 NNM-404:
                     type: oil
                     oil rate: 3924
                     oil cumulative: 648415
-                    gas rate: 7923678
-                    gas cumulative: 1468394590
+                    gas oil ratio: [2000, 4000]
             WHP3:
                 NNM-301:
                     type: oil
                     oil rate: 2899
                     oil cumulative: 667239
-                    gas rate: 6899247
-                    gas cumulative: 1479210651
+                    gas oil ratio: [2000, 4000]
                 NNM-302:
                     type: oil
                     oil rate: 2943
                     oil cumulative: 433918
-                    gas rate: 2942759
-                    gas cumulative: 433919437
+                    gas oil ratio: [2000, 4000]
                 NNM-303:
                     type: oil
                     oil rate: 1947
                     oil cumulative: 279266
-                    gas rate: 3947336
-                    gas cumulative: 507266010
+                    gas oil ratio: [2000, 4000]
                 NNM-304:
                     type: oil
                     oil rate: 1556
                     oil cumulative: 108577
-                    gas rate: 0
-                    gas cumulative: 0
+                    gas oil ratio: [2000, 4000]
         Litchendjili:
             LTC1:
                 LJM-11:
@@ -154,15 +143,13 @@ facilities:
                     type: oil
                     oil rate: 1851
                     oil cumulative: 2846703
-                    gas rate: 2072000
-                    gas cumulative: 4845154174
+                    gas oil ratio: [2000, 4000]
             WHP4:
                 NNM-401:
                     type: oil
                     oil rate: 4000
                     oil cumulative: 507833
-                    gas rate: 16000000
-                    gas cumulative: 1313829371
+                    gas oil ratio: [2000, 4000]
 
 """
 
@@ -210,10 +197,9 @@ facilities:
             AEP:
                 NNM-3:
                     type: oil
-                    oil rate: 1851
-                    oil cumulative: 2846703
-                    gas rate: 2072000
-                    gas cumulative: 4845154174
+                    oil rate: 5000
+                    oil cumulative: 0
+                    gas oil ratio: [2000, 4000]
     """
     configuration_file = make_temp_file(data)
     m = Manager(configuration_file.name)

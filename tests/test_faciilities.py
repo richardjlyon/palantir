@@ -91,8 +91,7 @@ class TestWellheadPlatform:
         well_details = {
             'oil rate': None,
             'oil cumulative': None,
-            'gas rate': None,
-            'gas cumulative': None
+            'gas oil ratio': None,
         }
         whp = manager.asset.pexes[0].wellhead_platforms[0]
         well_count = len(whp.wells)
@@ -158,8 +157,7 @@ class TestOilWell:
         well = manager.asset.get_well_by_name('NNM-3')
         assert well.oil_rate == 1851
         assert well.oil_cumulative == 2846703
-        assert well.gas_rate == 2072000
-        assert well.gas_cumulative == 4845154174
+        assert well.gas_oil_ratio == [2000, 4000]
 
 
 class TestGasWell:

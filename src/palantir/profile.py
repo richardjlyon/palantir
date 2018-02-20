@@ -13,7 +13,7 @@ GAS_WELL_INITIAL_DI = 0.000880626223092  # TODO check this
 def _decline(di, t, qoi, b):
     """Arp's equation for general decline in a well
         - qoi: initial rate of production
-        - di: iniial decline rate
+        - di: initial decline rate
         - b: curvature (b=0 exponential)
     """
     return qoi / ((1 + b * di * t) ** (1 / b))
