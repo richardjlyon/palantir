@@ -109,9 +109,9 @@ class DrillStep(Step):
         well_start_date = self.program.start_date + timedelta(days=self.elapsed_time)
 
         if self.type == 'oil':
-            well = OilWell(name=self.well_name, start_date=well_start_date, config=self.program.config)
+            well = OilWell(name=self.well_name, start_date=well_start_date, well_defaults=self.program.config)
         else:
-            well = GasWell(name=self.well_name, start_date=well_start_date, config=self.program.config)
+            well = GasWell(name=self.well_name, start_date=well_start_date, well_defaults=self.program.config)
         self.program.rig.location.add_well(well)
         self.program.elapsed_time += self.duration
 

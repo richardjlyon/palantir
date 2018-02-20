@@ -21,7 +21,7 @@ class Manager:
 
         self._initialise_facilities()
         self._run_programs()
-        # self._initialise_profiles()
+        self._initialise_profiles()
 
     def _initialise_facilities(self):
         self.asset = Asset(self.config['asset'], defaults=self.config)
@@ -36,9 +36,9 @@ class Manager:
 
                 for well_name, well_details in wells.items():
                     if well_details['type'] == 'oil':
-                        well = OilWell(name=well_name, well_details=well_details, config=self.config)
+                        well = OilWell(name=well_name, well_details=well_details, well_defaults=self.config)
                     else:
-                        well = GasWell(name=well_name, well_details=well_details, config=self.config)
+                        well = GasWell(name=well_name, well_details=well_details, well_defaults=self.config)
                     whp.add_well(well)
 
     def _run_programs(self):

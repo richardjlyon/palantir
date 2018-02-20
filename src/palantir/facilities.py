@@ -100,27 +100,19 @@ class WellHeadPlatform(NodeMixin):
 class Well(NodeMixin):
     """Represents a Well in an Asset"""
 
-    def __init__(self, name=None, start_date=None, well_details=None, config=None):
+    def __init__(self, name=None, start_date=None, well_details=None, well_defaults=None):
 
         self.parent = None
         self.name = name
-        self.start_date = None
-        self.well_details = well_details
-        self.active_period = None
-        self.choke = None
-        self.is_new_well = None
+        self.active_period = well_defaults['active period']
+        self.choke = well_defaults['choke']
 
         if well_details:
             self.is_new_well = False
-            self.start_date = config['start date']
+            self.start_date = well_defaults['start date']
         else:
             self.is_new_well = True
             self.start_date = start_date
-
-        if config:
-            self.active_period = config['active period']
-            self.choke = config['choke']
-
 
     @property
     def whp(self):
@@ -143,13 +135,13 @@ class Well(NodeMixin):
 class OilWell(Well):
     """Represents an oil well in an Asset"""
 
-    def __init__(self, name=None, start_date=None, well_details=None, config=None):
-        super().__init__(name=name, start_date=start_date, well_details=well_details, config=config)
+    def __init__(self, name=None, start_date=None, well_details=None, well_defaults=None):
+        super().__init__(name=name, start_date=start_date, well_details=well_details, well_defaults=well_defaults)
         # defaults
-        self.ultimate_oil_recovery = config['ultimate oil recovery']
-        self.initial_oil_rate = config['initial oil rate']
-        self.gas_oil_ratio = config['gas oil ratio']
-        self.b_oil = config['b oil']
+        self.ultimate_oil_recovery = well_defaults['ultimate oil recovery']
+        self.initial_oil_rate = well_defaults['initial oil rate']
+        self.gas_oil_ratio = well_defaults['gas oil ratio']
+        self.b_oil = well_defaults['b oil']
         # details
         if well_details:
             # It's an existing well
@@ -162,13 +154,13 @@ class OilWell(Well):
 class GasWell(Well):
     """Represents a gas well in an Asset"""
 
-    def __init__(self, name=None, start_date=None, well_details=None, config=None):
-        super().__init__(name=name, start_date=start_date, well_details=well_details, config=config)
+    def __init__(self, name=None, start_date=None, well_details=None, well_defaults=None):
+        super().__init__(name=name, start_date=start_date, well_details=well_details, well_defaults=well_defaults)
         # defaults
-        self.ultimate_gas_recovery = config['ultimate gas recovery']
-        self.initial_gas_rate = config['initial gas rate']
-        self.gas_condensate_ratio = config['gas condensate ratio']
-        self.b_gas = config['b gas']
+        self.ultimate_gas_recovery = well_defaults['ultimate gas recovery']
+        self.initial_gas_rate = well_defaults['initial gas rate']
+        self.gas_condensate_ratio = well_defaults['gas condensate ratio']
+        self.b_gas = well_defaults['b gas']
         # details
         if well_details:
             self.condensate_rate = well_details['condensate rate']

@@ -96,7 +96,7 @@ class TestWellheadPlatform:
         }
         whp = manager.asset.pexes[0].wellhead_platforms[0]
         well_count = len(whp.wells)
-        well = OilWell(name='New Well', well_details=well_details, config=config)
+        well = OilWell(name='New Well', well_details=well_details, well_defaults=config)
         whp.add_well(well)
         assert len(whp.wells) == well_count + 1
 
