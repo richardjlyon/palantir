@@ -56,8 +56,6 @@ class Profiles:
                         b_oil,
                         ultimate_oil_recovery))
 
-            print("\n+++", di_oil, initial_oil_rate, ultimate_oil_recovery)
-
             # generate oil curve
             qo = _decline(
                     di_oil,
