@@ -34,8 +34,7 @@ defaults:
 
 class TestProfile:
 
-    @pytest.mark.skip
-    def _test_basic(self, profile_single_existing_well):
+    def test_basic(self, profile_single_existing_well):
         assert isinstance(profile_single_existing_well.profiles.curves, pd.DataFrame)
 
 
@@ -68,13 +67,6 @@ facilities:
         assert curves.qg.iloc[365] == approx(8233680, abs=1)
         assert curves.qc.iloc[365] == 0
 
-    @pytest.mark.skip(reason="Haven't figured out how to handle gas well decline")
-    def test_existing_gas_well(self):
-        # GIVEN a single, existing gas well
-        # WHEN getting oil, gas and condensate values at time zero and time 365
-        # THEN it returns the correct values
-        pass
-
     def test_new_oil_well_at_time_zero(self):
         # GIVEN a single, existing oil well at time 0
         # WHEN getting oil, gas and condensate values at time zero and time 365
@@ -98,3 +90,11 @@ programs:
         assert curves.qo.iloc[365] == approx(3742, abs=1)
         assert curves.qg.iloc[365] == approx(8233680, abs=1)
         assert curves.qc.iloc[365] == 0
+
+    @pytest.mark.skip(reason="Haven't figured out how to handle gas well decline")
+    def test_existing_gas_well(self):
+        # GIVEN a single, existing gas well
+        # WHEN getting oil, gas and condensate values at time zero and time 365
+        # THEN it returns the correct values
+        pass
+
