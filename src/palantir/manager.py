@@ -34,14 +34,16 @@ class Manager:
                 whp = WellHeadPlatform(name=whp_name)
                 pex.add_wellhead_platform(whp)
 
-                for well_name, well_details in wells.items():
-                    if well_details['type'] == 'oil':
-                        well = OilWell(name=well_name, well_details=well_details, well_defaults=self.config)
-                    else:
-                        well = GasWell(name=well_name, well_details=well_details, well_defaults=self.config)
-                    whp.add_well(well)
+                if wells:
+                    for well_name, well_details in wells.items():
+                        if well_details['type'] == 'oil':
+                            well = OilWell(name=well_name, well_details=well_details, well_defaults=self.config)
+                        else:
+                            well = GasWell(name=well_name, well_details=well_details, well_defaults=self.config)
+                        whp.add_well(well)
 
     def _run_programs(self):
+
         """Parses configuration file for program steps, builds, and runs the program"""
         # TODO process multiple programs
         # TODO trap no program
@@ -54,6 +56,9 @@ class Manager:
                 program = Program(asset=self.asset, config=self.config, rig_name=rig_name,
                                   steps=program_details['program'])
                 self.programs.append(program)
+
+            for program in self.programs:
+                program.execute()
 
     def _initialise_profiles(self):
         """Build composite profile DataFrame from individual wells"""

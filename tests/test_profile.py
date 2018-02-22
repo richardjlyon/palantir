@@ -67,3 +67,34 @@ facilities:
         assert curves.qo.iloc[365] == approx(3742, abs=1)
         assert curves.qg.iloc[365] == approx(8233680, abs=1)
         assert curves.qc.iloc[365] == 0
+
+    @pytest.mark.skip(reason="Haven't figured out how to handle gas well decline")
+    def test_existing_gas_well(self):
+        # GIVEN a single, existing gas well
+        # WHEN getting oil, gas and condensate values at time zero and time 365
+        # THEN it returns the correct values
+        pass
+
+    def test_new_oil_well_at_time_zero(self):
+        # GIVEN a single, existing oil well at time 0
+        # WHEN getting oil, gas and condensate values at time zero and time 365
+        # THEN it returns the correct values
+        well_data = """
+facilities:
+    asset: MXII
+    pexes:
+        Nene:
+            WHP3:
+programs:
+    Rig1:
+        program:
+            - start: 01/01/2018, WHP3
+            - drill: NNM-305, oil, 70     
+"""
+        curves = generate_manager(well_data).profiles.curves
+        assert curves.qo.iloc[0] == 5000
+        assert curves.qg.iloc[0] == 10000000
+        assert curves.qc.iloc[0] == 0
+        assert curves.qo.iloc[365] == approx(3742, abs=1)
+        assert curves.qg.iloc[365] == approx(8233680, abs=1)
+        assert curves.qc.iloc[365] == 0
