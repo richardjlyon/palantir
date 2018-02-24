@@ -115,16 +115,16 @@ class Profiles:
 
     @property
     def field_production(self):
-        return self.curves.groupby(['date'])['qo', 'qg'].sum()
+        return self.curves.groupby(['date'])['qo', 'qg', 'qc'].sum()
 
     @property
     def pex_production(self):
-        return self.curves.groupby(['date', 'pex'])['qo', 'qg'].sum().unstack(fill_value=0)
+        return self.curves.groupby(['date', 'pex'])['qo', 'qg', 'qc'].sum().unstack(fill_value=0)
 
     @property
     def whp_production(self):
-        return self.curves.groupby(['date', 'whp'])['qo', 'qg'].sum().unstack(fill_value=0)
+        return self.curves.groupby(['date', 'whp'])['qo', 'qg', 'qc'].sum().unstack(fill_value=0)
 
     @property
     def well_production(self):
-        return self.curves.groupby(['date', 'well'])['qo', 'qg'].sum().unstack(fill_value=0)
+        return self.curves.groupby(['date', 'well'])['qo', 'qg', 'qc'].sum().unstack(fill_value=0)
