@@ -24,6 +24,8 @@ class Manager:
         self._initialise_profiles()
 
     def _initialise_facilities(self):
+        """Construct the facility tree of wellhead platforms and wells"""
+        
         self.asset = Asset(self.config['asset'], defaults=self.config)
 
         for pex_name, whps in self.config['pexes'].items():
@@ -43,7 +45,6 @@ class Manager:
                         whp.add_well(well)
 
     def _run_programs(self):
-
         """Parses configuration file for program steps, builds, and runs the program"""
         # TODO process multiple programs
         # TODO trap no program
@@ -62,5 +63,6 @@ class Manager:
 
     def _initialise_profiles(self):
         """Build composite profile DataFrame from individual wells"""
+
         for well in self.asset.wells:
             self.profiles.add(well)

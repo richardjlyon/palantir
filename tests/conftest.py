@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, division, print_function
-
 import pytest
+
 from palantir import make_temp_file
 from palantir.manager import Manager
 
@@ -106,7 +105,7 @@ programs:
             - move: WHP4, 30
             - drill: NNM-405, oil, 70
             - drill: NNM-406, oil, 70
-            - move: WHPL1, 30
+            - move: LTC1, 30
             - drill: L14, gas, 70
             - drill: L15, gas, 70
             - standby: 100

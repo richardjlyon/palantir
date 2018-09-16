@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+
 from palantir.facilities import Asset, OilWell, Pex, WellHeadPlatform
 
 
@@ -18,7 +19,7 @@ class TestAsset:
         assert isinstance(manager.asset.wellhead_platforms[0], WellHeadPlatform)
 
     def test_wells(self, manager):
-        assert len(manager.asset.wells) == 12
+        assert len(manager.asset.wells) == 18
         assert isinstance(manager.asset.wells[0], OilWell)
 
     def test_get_wellhead_platform_by_name(self, manager):
